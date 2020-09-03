@@ -10,8 +10,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,7 +25,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     ListView lv_pdf;
+    EditText search_fileName;
+    String str;
     public static ArrayList<File> fileList = new ArrayList<>();
+    ArrayList<File> fileListTemp;
+
     PDFAdapter obj_adapter;
     public static int REQUEST_PERMISSION = 1;
     boolean boolean_permission;
@@ -34,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         lv_pdf = (ListView) findViewById(R.id.listView_pdf);
+        search_fileName = findViewById(R.id.search_fileName);
 
         dir = new File(Environment.getExternalStorageDirectory().toString());
         permission_fn();
@@ -44,6 +52,34 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(),ViewPDFFiles.class);
                 intent.putExtra("position",position);
                 startActivity(intent);
+            }
+        });
+
+        search_fileName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+                str = search_fileName.getText().toString();
+                fileListTemp = new ArrayList<>();
+                if(str.length() > 0){
+                    for(int k=0 ; k < fileList.size() ; k++){
+                        if(fileList.get(k).getName().startsWith(str)){
+                            fileListTemp.add(fileList.get(k));
+                        }
+                    }
+                    lv_pdf.setAdapter(new PDFAdapter(MainActivity.this,fileListTemp));
+
+                }else
+                lv_pdf.setAdapter(new PDFAdapter(MainActivity.this,fileList));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
 
@@ -103,7 +139,37 @@ public class MainActivity extends AppCompatActivity {
 
                             }
                         }
+                        if(booleanPdf){
+                            booleanPdf = false;
+                        }else {
+                            fileList.add(listFile[i]);
+                        }
+                    }
+                }
+            }
+        }
+        return fileList;
+    }
 
+    public ArrayList<File> getFilteredFile(File dir){
+        File listFile[] = dir.listFiles();
+
+        if(listFile != null && listFile.length > 0){
+            for(int i=0; i<listFile.length; i++){
+                if(listFile[i].isDirectory()){
+
+                    getfile(listFile[i]);
+                }else {
+                    boolean booleanPdf = false;
+                    if(listFile[i].getName().startsWith(str)){
+
+                        for(int j=0; j<fileList.size(); j++){
+                            if(fileList.get(j).getName().equals(listFile[i].getName())){
+                                booleanPdf = true;
+                            }else {
+
+                            }
+                        }
                         if(booleanPdf){
                             booleanPdf = false;
                         }else {

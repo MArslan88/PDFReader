@@ -3,4 +3,12 @@
     <color name="colorPrimary">#607D8B</color>
     <color name="colorPrimaryDark">#455A64</color>
     <color name="colorAccent">#03DAC5</color>
+
+    <color name="blueCircle">#5786FD</color>
+    <color name="greenircle">#37CE99</color>
+    <color name="orangeCircle">#F1562F</color>
+    <color name="purpleCircle">#7D70D8</color>
+    <color name="graySearchBg">#F5F5F5</color>
+
+
 </resources>
