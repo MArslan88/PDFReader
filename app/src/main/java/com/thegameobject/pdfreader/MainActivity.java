@@ -18,6 +18,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +45,16 @@ public class MainActivity extends AppCompatActivity {
 
         lv_pdf = (ListView) findViewById(R.id.listView_pdf);
         search_fileName = findViewById(R.id.search_fileName);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent scanIntent = new Intent(MainActivity.this,ScanActivity.class);
+                startActivity(scanIntent);
+
+            }
+        });
 
         dir = new File(Environment.getExternalStorageDirectory().toString());
         permission_fn();
